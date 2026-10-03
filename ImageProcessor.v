@@ -1,14 +1,10 @@
-module ImageProcessor #(parameter WIDTH = 5, parameter HEIGHT = 4)(
+module ImageProcessor #(parameter WIDTH = 64, parameter HEIGHT = 64)(
 input wire clk,
 input wire rst,
-input wire valid,
 
-input wire [7:0] R,
-input wire [7:0] G,
-input wire [7:0] B,
+input wire rx,
 
-output wire [7:0] Edge,
-output wire edge_valid
+output wire tx
 );
 
 wire [7:0] gray_pixel;
@@ -25,6 +21,18 @@ wire [7:0] P8;
 wire [7:0] P9;
 
 wire window_valid;
+
+wire [7:0] rx_data;
+wire rx_valid;
+
+reg [7:0] R;
+reg [7:0] G;
+reg [7:0] B;
+reg valid;
+
+
+wire [7:0] Edge;
+wire edge_valid;
 
 Gray gray_inst(
 .clk(clk),
@@ -71,5 +79,65 @@ Sobel sobel_inst(
 .edge_valid(edge_valid)
 );
 
+uart_rx RX(
+.clk(clk),
+.rst(rst),
+.rx(rx),
+.data_out(rx_data),
+.data_valid(rx_valid)
+);
+
+uart_tx TX(
+.clk(clk),
+.rst(rst),
+.data_in(Edge),
+.data_valid(edge_valid),
+.tx(tx)
+);
+reg [1:0] byte_state;
+
+always @(posedge clk) begin
+    if (rst) begin
+        R <= 0;
+        G <= 0;
+        B <= 0;
+        byte_state <= 0;
+        valid <= 0;
+    end 
+    else begin
+
+        valid <= 0;
+
+        case (byte_state)
+
+            0: begin
+                if (rx_valid) begin
+                    R <= rx_data;
+                    byte_state <= 1;
+                end
+            end
+
+            1: begin
+                if (rx_valid) begin
+                    G <= rx_data;
+                    byte_state <= 2;
+                end
+            end
+
+            2: begin
+                if (rx_valid) begin
+                    B <= rx_data;
+                    byte_state <= 3;
+                end
+            end
+
+            3: begin
+                valid <= 1;
+                byte_state <= 0;
+            end
+
+        endcase
+    end
+end
 endmodule
 
