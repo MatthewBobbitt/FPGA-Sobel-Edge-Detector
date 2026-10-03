@@ -58,26 +58,26 @@ The resulting gradient values are then combined to determine the magnitude of th
 The current implementation follows this processing flow:
 
 Input Image 
-    | 
-    v 
+     >>
+    
 Image Resizing / Preprocessing 
-    | 
-    v 
+    >>
+    
 RGB Pixel Data 
-    | 
-    v 
+    >>
+    
 Grayscale Conversion 
-    | 
-    v 
+    >>
+    
 3x3 Pixel Window 
-    | 
-    v 
+    >>
+    
 Sobel Gx / Gy Calculation 
-    | 
-    v 
+    >>
+    
 Edge Magnitude 
-    | 
-    v 
+    >>
+    
 Output Image
 
 # Planned FPGA Implementation
@@ -85,22 +85,17 @@ Output Image
 The FPGA portion of this project is currently under development and has not yet been deployed to hardware.
 
 The planned architecture is:
-Pixel Input 
-    | 
-    v 
-Line Buffers 
-    | 
-    v  
-3x3 Pixel Window  
-    | 
-    v  
-Sobel Datapath (Gx and Gy)
-    | 
-    v  
-Edge Magnitude 
-    | 
-    v 
-Pixel Output
+Pixel Input >>
+    
+Line Buffers >>
+     
+3x3 Pixel Window  >>
+      
+Sobel Datapath (Gx and Gy) >>
+     
+Edge Magnitude >>
+    
+Pixel Output 
 
 The goal is to implement the computational portion of the Sobel algorithm as synthesizable Verilog rather than executing the algorithm sequentially in software.
 
