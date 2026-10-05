@@ -2,13 +2,13 @@ from PIL import Image
 import serial
 import time
 
-PORT = "COM4"
-BAUD = 115200
+PORT = "COM4"                                      #USE YOUR COM PORT FOR FPGA
+BAUD = 2000000                                     #2 Mbaud rate
 
-WIDTH = 1024
-HEIGHT = 768
+WIDTH = 1920
+HEIGHT = 1080                                      # Fix resolution to your liking
 
-INPUT_IMAGE = "gray_img.png"
+INPUT_IMAGE = "PUT YOUR JPG OR PNG HERE.png"
 OUTPUT_IMAGE = "edge_output.png"
 
 
